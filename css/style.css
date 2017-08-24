@@ -4,6 +4,43 @@ html, body {
 	padding: 0;
 }
 
+.nav-toggle {
+	font-size: 2.5em;
+	color: white;
+	float: left;
+	position: absolute;
+	z-index: 3;
+	left: 200px;
+	-webkit-transition: left 1s;
+    transition: left 1s;
+}
+
+.nav-open {
+	color: blue;
+	left: 15px;
+	-webkit-transition: left 1s;
+    transition: left 1s;
+}
+
+
+.side-bar {
+	height: 100%;
+	background-color: black;
+	width: 250px;
+	float: left;
+	position: absolute;
+	z-index: 2;
+	-webkit-transition: left 4s;
+    transition: left 4s;
+}
+
+.side-bar-closed {
+	left: -250px;
+	-webkit-transition: left 4s;
+    transition: left 4s;
+}
+
 #map {
 	height: 100%;
+	z-index: 1;
 }
