@@ -4,6 +4,8 @@ var ViewModel = function() {
 		document.getElementsByClassName("nav-toggle")[0].classList.toggle("nav-open");
 		document.getElementsByClassName("side-bar")[0].classList.toggle("side-bar-closed");
 	};
+
+	this.resultList = [{name: "Casa Loma"},{name: "Casa Loma"}]; 
 }
 
 

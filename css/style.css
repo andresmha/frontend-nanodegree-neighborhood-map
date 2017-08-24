@@ -11,12 +11,12 @@ html, body {
 	position: absolute;
 	z-index: 3;
 	left: 200px;
-	-webkit-transition: left 1s;
-    transition: left 1s;
+	-webkit-transition: left 0.7s linear 0.3s;
+    transition: left 0.7s linear 0.3s;
 }
 
 .nav-open {
-	color: blue;
+	color: black;
 	left: 15px;
 	-webkit-transition: left 1s;
     transition: left 1s;
@@ -30,14 +30,40 @@ html, body {
 	float: left;
 	position: absolute;
 	z-index: 2;
-	-webkit-transition: left 4s;
-    transition: left 4s;
+	left: 0px;
+	-webkit-transition: left 1s;
+    transition: left 1s;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
 }
 
 .side-bar-closed {
 	left: -250px;
-	-webkit-transition: left 4s;
-    transition: left 4s;
+	-webkit-transition: left 1.3s;
+    transition: left 1.3s;
+}
+
+.search-box {
+	margin: 70px auto 10px;
+	width: 90%;
+	height: 25px;
+}
+
+.search-box::placeholder {
+	color: #aaa;
+}
+
+.destination-list {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+}
+
+.destionation-item {
+	color: white;
+	width: 80%;
+	margin: 10px auto;
 }
 
 #map {
