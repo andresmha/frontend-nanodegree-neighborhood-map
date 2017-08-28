@@ -11,7 +11,10 @@ var markers = [];
 var bounds;
 
 //Variable to track last Infowindow opened;
-var lastInfoWIndow;
+var lastInfoWindow;
+
+//Unique InfoWindow
+var infoWindow;
 
 
 /**
@@ -27,6 +30,9 @@ function initMap() {
 		zoom: 13,
 		disableDefaultUI: true
 	});
+
+	//Initialize unique infoWindow
+	infoWindow = new google.maps.InfoWindow({});
 
 	//initialize markers with default Sites Array
 	updateMarkers(sites);
@@ -72,26 +78,37 @@ function createMarker(site) {
 	var marker = new google.maps.Marker({
 		position: markerPosition,
 		map: map,
-		title: site.name
-	});
-
-	//Creates InfoWindow for the marker
-	var infoWindow = new google.maps.InfoWindow({
-		content: "Prueba prplknaf asf adsf asdf asdf asdf  asdf sadf sad f asd flnlkdf"
+		title: site.name,
+		//ID for reference
+		id: site.id
 	});
 
 	//Add listener to the infowindow
 	marker.addListener("click", function(){
+		//Add animation to marker
+		//Set the id of the selected item
+		vm.selectListItem(site);
+
+		//Open Associated InfoWindow
 		infoWindow.open(map, marker);
 
-		//Keeps track of last infowindow opened and closes it
-		if (lastInfoWIndow) {
-			lastInfoWIndow.close();
-		}
-		lastInfoWIndow = infoWindow;
+		//change content of info window
+		infoWindow.setContent("<h2>" + site.name + "</h2>");
 	});
 
 	return marker;
+}
+
+//Animate marker
+function animateMarker(id) {
+	for (var i = 0; i < markers.length; i++) {
+		if (markers[i].id == id) {
+			markers[i].setAnimation(google.maps.Animation.BOUNCE);		
+		} else {
+			markers[i].setAnimation(null);		
+		}
+	}
+	
 }
 
 //Recenters map
@@ -114,4 +131,6 @@ function mapRecenter() {
 		map.setZoom(13);
 	}
 };
+
+
 

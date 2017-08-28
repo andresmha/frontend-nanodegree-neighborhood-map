@@ -9,6 +9,7 @@ var viewModel = function() {
 	//Set observable for search value binding
 	that.searchValue = ko.observable("");
 	that.resultSites = ko.observableArray();
+	that.selectedSite = ko.observable(0);
 
 	//Toogle classes for display functionality
 	that.menuIconOpenClassToggle = function() {
@@ -20,15 +21,18 @@ var viewModel = function() {
 	that.searchValue.subscribe(function(){
 		var siteName;
 
+		//Clear result Array
+		that.resultSites([]);
+
+		//Clear selected item
+	    that.clearListItemSelection();
+
 		//If Search Text is empty, restores default values
 		if (!that.searchValue()){
 			that.setDefaultSitesValue();
 			updateMarkers(sites);
 			return;
 		}
-
-		//Clear result Array
-		that.resultSites([]);
 
 		//Loop through base sites array and fill with results.
 	    for (var i = 0; i < sitesLength; i++) {
@@ -48,8 +52,16 @@ var viewModel = function() {
 		that.resultSites(sites.slice(0));
 	};
 
-	that.markClickedListItem = function() {
-		
+	//Set the id of the selected item
+	that.selectListItem = function(site) {
+		that.selectedSite(site.id);
+		animateMarker(site.id);
+	};
+
+	//Clears the id of the selected item
+	that.clearListItemSelection = function() {
+		that.selectedSite(0);
+		animateMarker(0);
 	};
 
 	//Execute by default to get all sites

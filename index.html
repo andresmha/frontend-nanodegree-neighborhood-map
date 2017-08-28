@@ -17,7 +17,7 @@
 	<div class="side-bar">
 		<input class="search-box" type="text" placeholder="Search your destination..." data-bind="textInput: searchValue">
 		<div class="destination-list" data-bind="foreach: resultSites">
-			<span  class="destination-item" data-bind="text: name"></span>
+			<span  class="destination-item" data-bind="text: name, css: { 'item-selected': id === $parent.selectedSite() }, click: $parent.selectListItem"></span>
 		</div>
 	</div>
 
