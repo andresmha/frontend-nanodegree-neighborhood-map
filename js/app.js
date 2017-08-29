@@ -54,14 +54,20 @@ var viewModel = function() {
 
 	//Set the id of the selected item
 	that.selectListItem = function(site) {
+		//Set selected site
 		that.selectedSite(site.id);
-		animateMarker(site.id);
+		
+		//selectMarker
+		selectMarker(site);
 	};
 
 	//Clears the id of the selected item
 	that.clearListItemSelection = function() {
+		//Mark site selection as empty
 		that.selectedSite(0);
-		animateMarker(0);
+
+		//Clear animations and infowindow
+		clearSelectedMarker();
 	};
 
 	//Execute by default to get all sites

@@ -10,9 +10,6 @@ var markers = [];
 //Map boundaries
 var bounds;
 
-//Variable to track last Infowindow opened;
-var lastInfoWindow;
-
 //Unique InfoWindow
 var infoWindow;
 
@@ -88,27 +85,46 @@ function createMarker(site) {
 		//Add animation to marker
 		//Set the id of the selected item
 		vm.selectListItem(site);
-
-		//Open Associated InfoWindow
-		infoWindow.open(map, marker);
-
-		//change content of info window
-		infoWindow.setContent("<h2>" + site.name + "</h2>");
 	});
 
 	return marker;
 }
 
-//Animate marker
-function animateMarker(id) {
+//Select marker
+function selectMarker(site) {
+	//Loop throug each marker
 	for (var i = 0; i < markers.length; i++) {
-		if (markers[i].id == id) {
-			markers[i].setAnimation(google.maps.Animation.BOUNCE);		
+
+		if (markers[i].id == site.id) {
+
+			//Animate selected marker
+			markers[i].setAnimation(google.maps.Animation.BOUNCE);
+
+			//change content of info window
+			infoWindow.setContent("<h2>" + site.name + "</h2>");
+
+			//Open Associated InfoWindow
+			infoWindow.open(map, markers[i]);
 		} else {
+
+			//remove animation from other than selected
 			markers[i].setAnimation(null);		
 		}
 	}
-	
+}
+
+//Clear marker selection
+function clearSelectedMarker() {
+	//Loop throug each marker
+	for (var i = 0; i < markers.length; i++) {
+
+		//remove animation from every marker
+		markers[i].setAnimation(null);		
+
+		//Close InfoWindow
+		infoWindow.close();
+
+	}
 }
 
 //Recenters map
