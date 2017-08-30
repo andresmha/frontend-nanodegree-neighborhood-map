@@ -43,6 +43,11 @@ function clearMarkers() {
 	markers = [];
 };
 
+//Error Handling for Google Maps
+function mapLoadingError() {
+	document.getElementById("map").innerHTML = "<span class='map-error'>Map couldn't load, please check your internet connection and Refresh the page.</span>";
+}
+
 //Keep markers array updated with current search conditions
 function updateMarkers(siteArray){
 	var site;
@@ -92,6 +97,8 @@ function createMarker(site) {
 
 //Select marker
 function selectMarker(site) {
+	var content;
+
 	//Loop throug each marker
 	for (var i = 0; i < markers.length; i++) {
 
@@ -100,8 +107,11 @@ function selectMarker(site) {
 			//Animate selected marker
 			markers[i].setAnimation(google.maps.Animation.BOUNCE);
 
+			//Get content to display on infoWindow
+			content = getInfoWindowContent(site.name);
+
 			//change content of info window
-			infoWindow.setContent("<h2>" + site.name + "</h2>");
+			infoWindow.setContent(content);
 
 			//Open Associated InfoWindow
 			infoWindow.open(map, markers[i]);
@@ -148,5 +158,46 @@ function mapRecenter() {
 	}
 };
 
+//Make request to Wikipedia API and returns HTML for infowindow
+function getInfoWindowContent(searchText) {
+	//default error value
+	var errorHTML = "<h3>" + searchText + "</h3><br>Wiki not available at the moment..";
 
+	try {
+		//Crear HTTP Request object
+		var xhr = new XMLHttpRequest();
 
+		//Open URL vie GET and async
+		xhr.open("GET", "https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&format=json&search=" + searchText, true);
+		xhr.setRequestHeader("Origin", "https://en.wikipedia.org");
+
+		//Send Request
+	    xhr.send()
+	}
+	catch(err) {
+	    return errorHTML;
+	};
+
+	//When response returned
+	xhr.onreadystatechange = function() {
+
+		//Validate if status done, HTTP Status ok and response not empty
+		if (xhr.readyState == 4 && xhr.status === 200 && xhr.responseText) {
+			var responseArray = JSON.parse(xhr.responseText);
+			var infoWindowHTML = prepareInfoWindowHTML(responseArray);
+			return infoWindowHTML;
+		} else {
+			//Error handling if request fails
+			return errorHTML;
+		}
+	}
+}
+
+//Generates HTML for InfoWindow based on array
+function prepareInfoWindowHTML(JSONAray) {
+	var formattedHTML = "<h3>" + JSONArray[0] + "</h3><br>";
+	formattedHTML += "<span>" + JSONArray[2][0] + "</span><br>";
+	formattedHTML += "<a href='" + JSONArray[3][0] + "'>Más info...</a>";
+
+	return formattedHTML;
+}
