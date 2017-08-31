@@ -3,15 +3,11 @@
 */
 //Google Map variable
 var map;
-
-//Array of markers
 var markers = [];
-
-//Map boundaries
 var bounds;
-
-//Unique InfoWindow
 var infoWindow;
+var infoWindowContent;
+var selectedMarker;
 
 
 /**
@@ -97,30 +93,29 @@ function createMarker(site) {
 
 //Select marker
 function selectMarker(site) {
-	var content;
 
 	//Loop throug each marker
 	for (var i = 0; i < markers.length; i++) {
-
+		//if selected
 		if (markers[i].id == site.id) {
 
+			//mark global selection
+			selectedMarker = markers[i];
+
 			//Animate selected marker
-			markers[i].setAnimation(google.maps.Animation.BOUNCE);
+			selectedMarker.setAnimation(google.maps.Animation.BOUNCE);
 
 			//Get content to display on infoWindow
-			content = getInfoWindowContent(site.name);
+			setInfoWindow(site.name);
 
-			//change content of info window
-			infoWindow.setContent(content);
-
-			//Open Associated InfoWindow
-			infoWindow.open(map, markers[i]);
 		} else {
 
 			//remove animation from other than selected
 			markers[i].setAnimation(null);		
 		}
 	}
+
+	
 }
 
 //Clear marker selection
@@ -133,6 +128,9 @@ function clearSelectedMarker() {
 
 		//Close InfoWindow
 		infoWindow.close();
+
+		//empty marker selection
+		selectedMarker = null;
 
 	}
 }
@@ -159,45 +157,53 @@ function mapRecenter() {
 };
 
 //Make request to Wikipedia API and returns HTML for infowindow
-function getInfoWindowContent(searchText) {
-	//default error value
-	var errorHTML = "<h3>" + searchText + "</h3><br>Wiki not available at the moment..";
+function setInfoWindow(searchText) {
+	infoWindowContent = ''
 
-	try {
-		//Crear HTTP Request object
-		var xhr = new XMLHttpRequest();
+	//Creates Script TAg
+	var scriptTag = document.createElement("script");
 
-		//Open URL vie GET and async
-		xhr.open("GET", "https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&format=json&search=" + searchText, true);
-		xhr.setRequestHeader("Origin", "https://en.wikipedia.org");
+	//Set src for sript tag with callback for jsonp
+	scriptTag.setAttribute("src", "https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&callback=getJSONP&format=json&search=" + searchText);
 
-		//Send Request
-	    xhr.send()
+	//Error handling
+	scriptTag.onerror = function() {
+		infoWindowContent = "<h3>" + searchText + "</h3><br>";
+		infoWindowContent += "Wiki no disponible en este momento.";
+		openInfoWindow();
 	}
-	catch(err) {
-	    return errorHTML;
-	};
 
-	//When response returned
-	xhr.onreadystatechange = function() {
-
-		//Validate if status done, HTTP Status ok and response not empty
-		if (xhr.readyState == 4 && xhr.status === 200 && xhr.responseText) {
-			var responseArray = JSON.parse(xhr.responseText);
-			var infoWindowHTML = prepareInfoWindowHTML(responseArray);
-			return infoWindowHTML;
-		} else {
-			//Error handling if request fails
-			return errorHTML;
-		}
-	}
+	//Append element to body tag
+	document.body.appendChild(scriptTag);
 }
 
+//Callback function for json parsing
+function getJSONP(data){
+	//fill infowindow accordingly based on data content
+	if(data) {
+		infoWindowContent = prepareInfoWindowHTML(data);
+	} else {
+		infoWindowContent = "Wiki no disponible en este momento.";
+	}
+
+	//Actually opens infowindow
+	openInfoWindow();
+}
+
+
 //Generates HTML for InfoWindow based on array
-function prepareInfoWindowHTML(JSONAray) {
+function prepareInfoWindowHTML(JSONArray) {
 	var formattedHTML = "<h3>" + JSONArray[0] + "</h3><br>";
 	formattedHTML += "<span>" + JSONArray[2][0] + "</span><br>";
-	formattedHTML += "<a href='" + JSONArray[3][0] + "'>Más info...</a>";
+	formattedHTML += "<a href='" + JSONArray[3][0] + "' target='_blank'>Más info...</a>";
 
 	return formattedHTML;
+}
+
+//Opens infowindow on selected marker
+function openInfoWindow(){
+	infoWindow.open(map, selectedMarker);
+
+	//change content of info window
+	infoWindow.setContent(infoWindowContent);
 }
