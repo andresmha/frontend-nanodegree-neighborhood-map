@@ -166,6 +166,9 @@ function setInfoWindow(searchText) {
 	//Set src for sript tag with callback for jsonp
 	scriptTag.setAttribute("src", "https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&callback=getJSONP&format=json&search=" + searchText);
 
+	//Set Async to script tag
+	scriptTag.setAttribute("async", '');
+
 	//Error handling
 	scriptTag.onerror = function() {
 		infoWindowContent = "<h3>" + searchText + "</h3><br>";
