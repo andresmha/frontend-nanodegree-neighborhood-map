@@ -1,4 +1,4 @@
-var viewModel = function() {
+var ViewModel = function() {
 	// "this" reference saving 
 	var that = this;
 	var markerPosition;
@@ -75,7 +75,7 @@ var viewModel = function() {
 };
 
 //viewModel Instance
-var vm = new viewModel();
+var vm = new ViewModel();
 
 //Apply KO Bindings
 ko.applyBindings(vm);

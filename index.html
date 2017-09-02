@@ -10,25 +10,27 @@
 	
 </head>
 <body>
-	<div class="menu-icon">
-		<span class="nav-toggle" data-bind="click: menuIconOpenClassToggle">&#9776;</a>
-	</div>
+	<nav class="menu-icon">
+		<span class="nav-toggle" data-bind="click: menuIconOpenClassToggle">&#9776;</span>
+	</nav>
 
-	<div class="side-bar">
+	<aside class="side-bar">
 		<input class="search-box" type="text" placeholder="Search your destination..." data-bind="textInput: searchValue">
 		<div class="destination-list" data-bind="foreach: resultSites">
 			<span  class="destination-item" data-bind="text: name, css: { 'item-selected': id === $parent.selectedSite() }, click: $parent.selectListItem"></span>
 		</div>
-	</div>
+	</aside>
 
-	<div id="map"></div>
+	<main id="map"></main>
 
 
+	<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
+	
 	<script src="js/sites.js"></script>
 	<script src="js/map.js"></script>
-	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEygU4yfbYNPYlDgKfpGsPMH4kuYJuRFY&callback=initMap" onerror="mapLoadingError()"></script>
-	<script src="http://ajax.aspnetcdn.com/ajax/knockout/knockout-3.4.2.js"></script>
 	<script src="js/app.js"></script>
+
+	<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCEygU4yfbYNPYlDgKfpGsPMH4kuYJuRFY&callback=initMap" onerror="mapLoadingError()"></script>
 	
 </body>
 </html>
