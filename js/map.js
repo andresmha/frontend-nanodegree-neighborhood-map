@@ -196,9 +196,9 @@ function getJSONP(data){
 
 //Generates HTML for InfoWindow based on array
 function prepareInfoWindowHTML(JSONArray) {
-	var formattedHTML = "<h3>" + JSONArray[0] + "</h3><br>";
+	var formattedHTML = "<h3>" + JSONArray[0] + "</h3>";
 	formattedHTML += "<span>" + JSONArray[2][0] + "</span><br>";
-	formattedHTML += "<a href='" + JSONArray[3][0] + "' target='_blank'>Más info...</a>";
+	formattedHTML += "<a href='" + JSONArray[3][0] + "' target='_blank'>More info...</a>";
 
 	return formattedHTML;
 }
